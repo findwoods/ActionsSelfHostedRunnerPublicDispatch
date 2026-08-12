@@ -1,0 +1,22 @@
+name: iPad Light
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  ipad-light:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: findwoods/ActionsSelfHostedRunnerPublicDispatch/dispatch@481a3c883b9a197881fd05125ac54877894d4b5d
+        with:
+          task-file: .github/ipad-runner/task-public-dispatch.json
+          task-sha: ${{ github.sha }}
