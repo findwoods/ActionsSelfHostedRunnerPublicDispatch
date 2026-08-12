@@ -1,0 +1,19 @@
+{
+  "requiredCapabilities": ["python-3.13-ios", "files"],
+  "requiredLabels": ["ipad", "ipad-light", "arm64"],
+  "workingDirectory": null,
+  "statusContext": "ipad-runner/public-dispatch",
+  "artifactPaths": ["ipad-output"],
+  "completionEvent": "public-dispatch-ipad-complete",
+  "steps": [
+    {
+      "id": "validate-distribution",
+      "name": "Validate public dispatch distribution",
+      "kind": "python",
+      "script": "import ast\nimport json\nfrom pathlib import Path\n\nrequired = [Path('dispatch/action.yml'), Path('dispatch/dispatch.py'), Path('README.md')]\nmissing = [str(path) for path in required if not path.is_file()]\nif missing:\n    raise SystemExit(f'missing distribution files: {missing}')\nsource = Path('dispatch/dispatch.py').read_text(encoding='utf-8')\nast.parse(source)\naction = Path('dispatch/action.yml').read_text(encoding='utf-8')\nassert 'dispatch.py' in action\nassert 'GITHUB_ACTION_PATH' in action\noutput = Path('ipad-output')\noutput.mkdir(exist_ok=True)\n(output / 'distribution-report.json').write_text(json.dumps({\n    'pythonSyntax': 'pass',\n    'actionEntrypoint': 'pass',\n    'sourceBytes': len(source.encode('utf-8'))\n}, sort_keys=True) + '\\n', encoding='utf-8')\nprint('public dispatch distribution ok')\n",
+      "args": [],
+      "env": {},
+      "headers": {}
+    }
+  ]
+}
