@@ -1,0 +1,34 @@
+{
+  "pendingBlobSHA" : "edc0ffc49df2e7beff657108209302034c8bbb28",
+  "result" : {
+    "capabilities" : [
+      "python-3.13-ios",
+      "mini-shell",
+      "sha256",
+      "javascript-core",
+      "files",
+      "wasm-wasi",
+      "http"
+    ],
+    "conclusion" : "success",
+    "deviceID" : "ipad-291354dc-3eb6-4998-a9cb-4901b9155194",
+    "finishedAt" : "2026-08-12T17:59:42Z",
+    "repository" : {
+      "fullName" : "findwoods\/ActionsSelfHostedRunnerPublicDispatch",
+      "sha" : "ecd582f575f3bd7b9c9572c9e7e1c3ba0d59f50f"
+    },
+    "startedAt" : "2026-08-12T17:59:42Z",
+    "steps" : [
+      {
+        "conclusion" : "success",
+        "finishedAt" : "2026-08-12T17:59:42Z",
+        "startedAt" : "2026-08-12T17:59:42Z",
+        "stderr" : "",
+        "stdout" : "public dispatch distribution ok\n",
+        "stepID" : "validate-distribution"
+      }
+    ],
+    "taskID" : "18f215b8-296e-40c7-a631-5477e423f53e"
+  },
+  "version" : 1
+}
