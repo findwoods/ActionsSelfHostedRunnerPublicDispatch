@@ -1,0 +1,41 @@
+name: Public iPad Light Dispatch
+description: Queue one trusted commit on the caller repository's own ipad-queue branch.
+author: findwoods
+
+inputs:
+  task-file:
+    description: Path to a repository-local iPad task JSON template inside GITHUB_WORKSPACE.
+    required: true
+  queue-branch:
+    description: Caller repository queue branch.
+    required: false
+    default: ipad-queue
+  task-sha:
+    description: Exact full target commit SHA; defaults to github.sha.
+    required: false
+    default: ""
+
+outputs:
+  task-id:
+    description: One-shot queued task identifier.
+    value: ${{ steps.dispatch.outputs.task-id }}
+
+runs:
+  using: composite
+  steps:
+    - name: Queue repository-local iPad task
+      id: dispatch
+      shell: bash
+      env:
+        IPAD_PUBLIC_DISPATCH_TOKEN: ${{ github.token }}
+        INPUT_TASK_FILE: ${{ inputs.task-file }}
+        QUEUE_BRANCH: ${{ inputs.queue-branch }}
+        TASK_SHA_INPUT: ${{ inputs.task-sha }}
+      run: |
+        set -euo pipefail
+        task_sha="${TASK_SHA_INPUT:-$GITHUB_SHA}"
+        task_id="$(
+          python3 "$GITHUB_ACTION_PATH/dispatch.py"             "$GITHUB_WORKSPACE/$INPUT_TASK_FILE"             --queue-branch "$QUEUE_BRANCH"             --sha "$task_sha"             --token-env IPAD_PUBLIC_DISPATCH_TOKEN
+        )"
+        test -n "$task_id"
+        printf 'task-id=%s\n' "$task_id" >> "$GITHUB_OUTPUT"
