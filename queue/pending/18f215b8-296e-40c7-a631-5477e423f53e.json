@@ -1,0 +1,34 @@
+{
+  "artifactPaths": [
+    "ipad-output"
+  ],
+  "completionEvent": "public-dispatch-ipad-complete",
+  "id": "18f215b8-296e-40c7-a631-5477e423f53e",
+  "repository": {
+    "fullName": "findwoods/ActionsSelfHostedRunnerPublicDispatch",
+    "sha": "ecd582f575f3bd7b9c9572c9e7e1c3ba0d59f50f"
+  },
+  "requiredCapabilities": [
+    "python-3.13-ios",
+    "files"
+  ],
+  "requiredLabels": [
+    "ipad",
+    "ipad-light",
+    "arm64"
+  ],
+  "statusContext": "ipad-runner/public-dispatch",
+  "steps": [
+    {
+      "args": [],
+      "env": {},
+      "headers": {},
+      "id": "validate-distribution",
+      "kind": "python",
+      "name": "Validate public dispatch distribution",
+      "script": "import ast\nimport json\nfrom pathlib import Path\n\nrequired = [Path('dispatch/action.yml'), Path('dispatch/dispatch.py'), Path('README.md')]\nmissing = [str(path) for path in required if not path.is_file()]\nif missing:\n    raise SystemExit(f'missing distribution files: {missing}')\nsource = Path('dispatch/dispatch.py').read_text(encoding='utf-8')\nast.parse(source)\naction = Path('dispatch/action.yml').read_text(encoding='utf-8')\nassert 'dispatch.py' in action\nassert 'GITHUB_ACTION_PATH' in action\noutput = Path('ipad-output')\noutput.mkdir(exist_ok=True)\n(output / 'distribution-report.json').write_text(json.dumps({\n    'pythonSyntax': 'pass',\n    'actionEntrypoint': 'pass',\n    'sourceBytes': len(source.encode('utf-8'))\n}, sort_keys=True) + '\\n', encoding='utf-8')\nprint('public dispatch distribution ok')\n"
+    }
+  ],
+  "version": 1,
+  "workingDirectory": null
+}
